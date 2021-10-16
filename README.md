@@ -7,6 +7,8 @@ A sample Dockerfile to use OpenH264 & FFmpeg from python codes.
 ```shell
 $ docker build -t openh264-ffmpeg-py .
 $ docker run --rm --mount type=bind,src=$(pwd)/movies,dst=/movies openh264-ffmpeg-py
+$ docker run -t -d --name ffmpeg-py --mount type=bind,src=$(pwd)/movies,dst=/movies openh264-ffmpeg-py
+
 original file info:
 {'format': {'bit_rate': '3428852',
             'duration': '6.016667',
