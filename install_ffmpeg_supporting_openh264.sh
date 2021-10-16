@@ -10,24 +10,25 @@ temp_dir=$(mktemp -d)
 
 # build openh264
 cd $temp_dir
-git clone -b v2.1.0 --depth 1 --single-branch https://github.com/cisco/openh264.git
-cd openh264
+wget --no-check-certificate https://github.com/cisco/openh264/archive/refs/tags/v2.1.1.tar.gz
+tar xf v2.1.1.tar.gz
+cd openh264-2.1.1
 make -j `nproc`
 make install
 ldconfig
 
 # replace openh264 binary to avoid license problem
 cd $temp_dir
-curl -o ./libopenh264-2.1.0-linux64.5.so.bz2 -L https://github.com/cisco/openh264/releases/download/v2.1.0/libopenh264-2.1.0-linux64.5.so.bz2
-bunzip2 libopenh264-2.1.0-linux64.5.so.bz2
-cp libopenh264-2.1.0-linux64.5.so /usr/local/lib/libopenh264.so.2.1.0
+wget --no-check-certificate https://github.com/cisco/openh264/releases/download/v2.1.1/libopenh264-2.1.1-linux64.6.so.bz2
+bunzip2 libopenh264-2.1.1-linux64.6.so.bz2
+cp libopenh264-2.1.1-linux64.6.so /usr/local/lib/libopenh264.so.2.1.1
 rm /usr/local/lib/libopenh264.a
 
 # build ffmpeg
 cd $temp_dir
-git clone https://git.ffmpeg.org/ffmpeg.git
-cd ffmpeg
-git checkout n4.2.2
+wget --no-check-certificate https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n4.2.5.tar.gz
+tar xf n4.2.5.tar.gz
+cd FFmpeg-n4.2.5
 ./configure --enable-libopenh264 --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libvpx
 make -j `nproc`
 make install
