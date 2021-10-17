@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3
+FROM tiangolo/uvicorn-gunicorn:python3.8
 
 ENV buildDeps='unzip build-essential curl pkg-config'
 RUN apt-get update && \
@@ -16,10 +16,10 @@ RUN chmod 755 ./install_ffmpeg_supporting_openh264.sh && ./install_ffmpeg_suppor
 RUN apt-get purge -y --auto-remove $buildDeps
 RUN rm ./install_ffmpeg_supporting_openh264.sh
 
+COPY . .
+
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir \
-    ffmpeg-python
+    pip install --no-cache-dir -r requirements.txt
 
-COPY main.py ./
-
-CMD [ "python", "./main.py", "2>/dev/null" ]
+# CMD [ "python", "./main.py", "2>/dev/null" ]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "81", "--reload"]
